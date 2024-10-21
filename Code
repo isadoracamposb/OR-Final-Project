@@ -1,1 +1,11 @@
 #OR Code
+#import the data set of incompatible pairs
+# Read data and draw some figures
+import json
+
+# Open and read the JSON file
+with open('The_Three_Amigas.json', 'r') as file:
+    data = json.load(file)
+
+# Print the data
+print(data)
