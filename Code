@@ -9,3 +9,53 @@ with open('The_Three_Amigas.json', 'r') as file:
 
 # Print the data
 print(data)
+
+
+#import networkx as nx
+
+
+# Create a graph
+G = nx.DiGraph()
+
+# Create nodes
+counter = 0
+for element in data:
+    #print(element)
+    G.add_nodes_from([(counter, element)])
+    counter += 1
+
+#G.add_nodes_from(data)
+
+#print(G.nodes)
+
+donor_recipient_compatibility = {'O': ['O', 'A', 'B', 'AB'], 'A': ['A', 'AB'], 'B':['B', 'AB'], 'AB':['AB']}
+
+# Create edges (relations)
+for node in G.nodes:
+    donors = G.nodes[node]['Donor']
+    #print(donors)
+    for donor in donors:
+        for vertex in G.nodes:
+            if node == vertex: continue
+            recipient = G.nodes[vertex]['Recipient']
+            if recipient not in donor_recipient_compatibility[donor]: continue
+            G.add_edge(node, vertex)    
+                
+print('edges:', G.edges)   
+
+# Find cycles of length 2
+
+cycle_2 = []
+
+for (i,j) in G.edges:
+    G.edges[(i,j)]["visited"] = False
+
+for (i,j) in G.edges:
+    if G.edges[(i,j)]["visited"] == True: continue
+    if (j,i) in G.edges:
+        cycle_2.append((i,j,i))
+        G.edges[(j,i)]["visited"] = True
+            
+print("cycles of length 2:", cycle_2)
+num_cycles = len(cycle_2)
+print(num_cycles)
