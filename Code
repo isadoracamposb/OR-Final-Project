@@ -1,10 +1,11 @@
-#OR Code
 #import the data set of incompatible pairs
 # Read data and draw some figures
 import json
+import network as nx
+import matplotlib.pyplot as plt
 
 # Open and read the JSON file
-with open('The_Three_Amigas.json', 'r') as file:
+with open('C:\\Users\\b1chl\\Downloads\\The_Three_Amigas.json') as file:
     data = json.load(file)
 
 # Print the data
