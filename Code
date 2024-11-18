@@ -60,3 +60,21 @@ for (i,j) in G.edges:
 print("cycles of length 2:", cycle_2)
 num_cycles = len(cycle_2)
 print(num_cycles)
+
+
+# find cycles of length 3
+potential_cycle_3 = []
+H = G.to_undirected()
+for (u,v) in H.edges:
+    for k in nx.common_neighbors(H, u, v):
+        potential_cycle_3.append((u,v,k))
+
+print("potential_cycle_3:", potential_cycle_3)
+cycle_3 = []
+for (u,v,k) in potential_cycle_3:
+    if (u,v) in G.edges and (v,k) in G.edges and (k,u) in G.edges:
+        cycle_3.append((u,v,k,u))
+    if (v,u) in G.edges and (u,k) in G.edges and (k,v) in G.edges:
+        cycle_3.append((v,u,k,v))
+
+print("cycle_3", cycle_3) 
