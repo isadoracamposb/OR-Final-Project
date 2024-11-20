@@ -129,3 +129,21 @@ for cycle in selected_cycles:
         donor_dict[num_donors] = 0
         
 print(donor_dict)
+
+total_dict = {}
+
+for cycle in cycle_2:
+    a = cycle[0]
+    total_donors = len(G.nodes[a]['Donor'])
+    if total_donors in total_dict:
+        total_dict[total_donors] +=1
+    else:
+        total_dict[total_donors] = 0
+    b = cycle[1]
+    total_donors = len(G.nodes[b]['Donor'])
+    if total_donors in total_dict:
+        donor_dict[total_donors] += 1
+    else: donor_dict[total_donors] = 0
+        
+print(total_dict)
+
