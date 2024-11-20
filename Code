@@ -77,6 +77,10 @@ print(num_cycles)
 # Let's find a maximum matching
 import gurobipy as gp
 from gurobipy import GRB
+from time import time
+
+# model building here excluded from timer
+start = time()
 
 # Create model object
 m = gp.Model()
@@ -85,20 +89,43 @@ m = gp.Model()
 x = m.addVars(cycle_2, vtype=GRB.BINARY)
 
 # Objective function: maximize number of edges
-m.setObjective(gp.quicksum(2*x[e] for e in cycle_2), GRB.MAXIMIZE)
+m.setObjective(gp.quicksum(2*x[C] for C in cycle_2), GRB.MAXIMIZE)
 
 # The number of incomming arcs to each vertex is at most one
-m.addConstrs(gp.quicksum(x[(u,v)] for u in cycle_2 if (u,v) in G.edges) <= 1 for v in G.nodes)
+m.addConstrs(gp.quicksum(x[C] for C in cycle_2 if v in C) <= 1 for v in G.nodes)
 
+solve_time_start = time()
 # Solve
 m.optimize()
 
+solve_time_end = time()
 
-from time import time
-# model building here excluded from timer
-start = time()
-m.optimize()
 end = time()
-elapsed_time = end - start
-print("Elapsed time: {:.5f} seconds".format(elapsed_time))
-print("Gurobi Runtime: {:.5f} seconds".format(m.Runtime))
+total_time = end - start
+#print("Elapsed time: ", elapsed_time)
+print("Total Runtime: ", total_time)
+print("Solve Time: ", solve_time_end - solve_time_start)
+
+# Retrieve solutions
+selected_cycles = [cycle for cycle in cycle_2 if x[cycle].x > 0.5]
+
+print("selected_cycles:", selected_cycles)
+
+# Retrieve Donors' information
+donor_dict = {}
+
+for cycle in selected_cycles:
+    a = cycle[0]
+    num_donors = len(G.nodes[a]['Donor'])
+    if num_donors in donor_dict:
+        donor_dict[num_donors] += 1
+    else:
+        donor_dict[num_donors] = 0
+    b = cycle[1]
+    num_donors = len(G.nodes[b]['Donor'])
+    if num_donors in donor_dict:
+        donor_dict[num_donors] += 1
+    else:
+        donor_dict[num_donors] = 0
+        
+print(donor_dict)
