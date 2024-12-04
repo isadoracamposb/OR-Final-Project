@@ -23,7 +23,7 @@ donor_recipient_compatibility = {'O': ['O', 'A', 'B', 'AB'], 'A': ['A', 'AB'], '
 # Create edges (relations)
 for node in G.nodes:
     donors = G.nodes[node]['Donor']
-       for donor in donors:
+    for donor in donors:
         for vertex in G.nodes:
             if node == vertex: continue
             recipient = G.nodes[vertex]['Recipient']
